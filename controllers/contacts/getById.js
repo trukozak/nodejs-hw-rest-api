@@ -8,8 +8,6 @@ const getById = async (req, res) => {
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found`);
   }
-  sendResponse(res, {
-    result,
-  });
+  sendResponse({ res, data: { result } });
 };
 module.exports = getById;

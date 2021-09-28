@@ -13,9 +13,12 @@ const updateById = async (req, res) => {
     throw new NotFound(`Contact with id=${contactId} not found!`);
   }
 
-  sendResponse(res, {
-    result,
-    message: "Contact updated",
+  sendResponse({
+    res,
+    data: {
+      result,
+      message: "Contact updated",
+    },
   });
 };
 

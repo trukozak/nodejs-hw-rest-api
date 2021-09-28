@@ -8,9 +8,12 @@ const removeById = async (req, res, next) => {
   if (!result) {
     throw new NotFound(`Contact with id=${contactId} not found`);
   }
-  sendResponse(res, {
-    result,
-    message: "Success remove contact",
+  sendResponse({
+    res,
+    data: {
+      result,
+      message: "Success remove contact",
+    },
   });
 };
 
