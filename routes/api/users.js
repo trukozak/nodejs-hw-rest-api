@@ -17,6 +17,9 @@ router.get("/signout", authenticate, controllerWrapper(ctrl.signout));
 
 router.get("/current", authenticate, controllerWrapper(ctrl.currentUser));
 
+router.get("/verify/:verifyToken", controllerWrapper(ctrl.verify));
+router.post("/verify", controllerWrapper(ctrl.verify));
+
 router.patch(
   "/avatars",
   authenticate,

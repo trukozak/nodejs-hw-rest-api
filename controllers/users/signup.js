@@ -1,5 +1,5 @@
 const { User } = require("../../models");
-const { sendResponse } = require("../../helpers");
+const { sendResponse, sendEmail } = require("../../helpers");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -16,9 +16,20 @@ const signup = async (req, res) => {
 
   const newUser = new User({ email });
   newUser.setPassword(password);
+  newUser.setVerifyToken();
   await newUser.save();
 
-  await User.create(newUser);
+  const { verifyToken } = await User.create(newUser);
+
+  const data = {
+    to: email,
+    subject: "Подтверждение email при регистрации на сайте localhost:3000",
+    html: `<a 
+    href="http://localhost:3000/api/users/verify/${verifyToken}" 
+    target="_blank">Подтвердить регистрацию</a>`,
+  };
+
+  await sendEmail(data);
   sendResponse({
     res,
     status: 201,
@@ -26,6 +37,7 @@ const signup = async (req, res) => {
       message: "Registration success",
       email: newUser.email,
       subscription: newUser.subscription,
+      verifyToken,
     },
   });
 };
