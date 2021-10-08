@@ -6,7 +6,7 @@ const {
   authenticate,
   upload,
 } = require("../../middlewares");
-const { joiSchema } = require("../../models/user");
+const { joiSchema, joiUserVerifySchema } = require("../../models/user");
 const router = express.Router();
 
 router.post("/signup", validation(joiSchema), controllerWrapper(ctrl.signup));
@@ -17,14 +17,18 @@ router.get("/signout", authenticate, controllerWrapper(ctrl.signout));
 
 router.get("/current", authenticate, controllerWrapper(ctrl.currentUser));
 
-router.get("/verify/:verifyToken", controllerWrapper(ctrl.verify));
-router.post("/verify", controllerWrapper(ctrl.verify));
-
 router.patch(
   "/avatars",
   authenticate,
   upload.single("avatar"),
   controllerWrapper(ctrl.updateAvatar)
+);
+router.get("/verify/:verifyToken", controllerWrapper(ctrl.verify));
+
+router.post(
+  "/verify",
+  validation(joiUserVerifySchema),
+  controllerWrapper(ctrl.repeatVerify)
 );
 
 module.exports = router;

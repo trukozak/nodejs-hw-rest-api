@@ -1,8 +1,10 @@
 const { User } = require("../../models");
 const { sendResponse, sendEmail } = require("../../helpers");
+const emailVerify = require("../../tpl/emailVerify");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
+  
   const result = await User.findOne({ email });
   if (result) {
     sendResponse({
@@ -23,10 +25,8 @@ const signup = async (req, res) => {
 
   const data = {
     to: email,
-    subject: "Подтверждение email при регистрации на сайте localhost:3000",
-    html: `<a 
-    href="http://localhost:3000/api/users/verify/${verifyToken}" 
-    target="_blank">Подтвердить регистрацию</a>`,
+    subject: "Email verification",
+    html: emailVerify(verifyToken, email),
   };
 
   await sendEmail(data);

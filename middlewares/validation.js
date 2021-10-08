@@ -1,4 +1,4 @@
-const sendResponse = require("../helpers");
+const { sendResponse } = require("../helpers");
 
 const validation = (scheme) => {
   const func = (req, res, next) => {
